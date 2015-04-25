@@ -1,6 +1,6 @@
 ﻿namespace FantasyBot
 {
-    partial class Form1
+    partial class MainForm
     {
         /// <summary>
         /// Required designer variable.
@@ -29,10 +29,6 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            Awesomium.Core.WebPreferences webPreferences2 = new Awesomium.Core.WebPreferences(true);
-            this.wcMain = new Awesomium.Windows.Forms.WebControl(this.components);
-            this.webControlContextMenu1 = new Awesomium.Windows.Forms.WebControlContextMenu(this.components);
-            this.webSessionProvider1 = new Awesomium.Windows.Forms.WebSessionProvider(this.components);
             this.bLogin = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
@@ -47,39 +43,17 @@
             this.bRunJS = new System.Windows.Forms.Button();
             this.tbXPath = new System.Windows.Forms.TextBox();
             this.bInjectJQ = new System.Windows.Forms.Button();
+            this.bMoveInject = new System.Windows.Forms.Button();
+            this.wcMain = new Awesomium.Windows.Forms.WebControl(this.components);
+            this.webSessionProvider1 = new Awesomium.Windows.Forms.WebSessionProvider(this.components);
+            this.abUrl = new Awesomium.Windows.Forms.AddressBox();
+            this.button10 = new System.Windows.Forms.Button();
+            this.button11 = new System.Windows.Forms.Button();
             this.SuspendLayout();
-            // 
-            // wcMain
-            // 
-            this.wcMain.ContextMenuStrip = this.webControlContextMenu1;
-            this.wcMain.Location = new System.Drawing.Point(12, 0);
-            this.wcMain.Size = new System.Drawing.Size(718, 473);
-            this.wcMain.Source = new System.Uri("http://fantasyland.ru/index.php?e1", System.UriKind.Absolute);
-            this.wcMain.TabIndex = 0;
-            this.wcMain.JavascriptRequest += new Awesomium.Core.JavascriptRequestEventHandler(this.Awesomium_Windows_Forms_WebControl_JavascriptRequest);
-            this.wcMain.JavascriptMessage += new Awesomium.Core.JavascriptMessageEventHandler(this.Awesomium_Windows_Forms_WebControl_JavascriptMessage);
-            this.wcMain.LoadingFrameComplete += new Awesomium.Core.FrameEventHandler(this.Awesomium_Windows_Forms_WebControl_LoadingFrameComplete);
-            // 
-            // webControlContextMenu1
-            // 
-            this.webControlContextMenu1.Name = "webControlContextMenu1";
-            this.webControlContextMenu1.Size = new System.Drawing.Size(204, 126);
-            this.webControlContextMenu1.View = null;
-            // 
-            // webSessionProvider1
-            // 
-            webPreferences2.JavascriptViewChangeSource = false;
-            webPreferences2.JavascriptViewEvents = false;
-            webPreferences2.JavascriptViewExecute = false;
-            webPreferences2.PdfJS = false;
-            webPreferences2.Plugins = false;
-            webPreferences2.WebAudio = false;
-            this.webSessionProvider1.Preferences = webPreferences2;
-            this.webSessionProvider1.Views.Add(this.wcMain);
             // 
             // bLogin
             // 
-            this.bLogin.Location = new System.Drawing.Point(12, 497);
+            this.bLogin.Location = new System.Drawing.Point(12, 482);
             this.bLogin.Name = "bLogin";
             this.bLogin.Size = new System.Drawing.Size(75, 23);
             this.bLogin.TabIndex = 1;
@@ -201,7 +175,6 @@
             this.tbXPath.Name = "tbXPath";
             this.tbXPath.Size = new System.Drawing.Size(373, 20);
             this.tbXPath.TabIndex = 13;
-            this.tbXPath.Text = "//iframe[@name=\'no_combat\']";
             // 
             // bInjectJQ
             // 
@@ -213,11 +186,74 @@
             this.bInjectJQ.UseVisualStyleBackColor = true;
             this.bInjectJQ.Click += new System.EventHandler(this.bInjectJQ_Click);
             // 
-            // Form1
+            // bMoveInject
+            // 
+            this.bMoveInject.Location = new System.Drawing.Point(12, 511);
+            this.bMoveInject.Name = "bMoveInject";
+            this.bMoveInject.Size = new System.Drawing.Size(85, 48);
+            this.bMoveInject.TabIndex = 15;
+            this.bMoveInject.Text = "Inject \"Move\" script";
+            this.bMoveInject.UseVisualStyleBackColor = true;
+            this.bMoveInject.Click += new System.EventHandler(this.bMoveInject_Click);
+            // 
+            // wcMain
+            // 
+            this.wcMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.wcMain.Location = new System.Drawing.Point(12, 12);
+            this.wcMain.NavigationInfo = Awesomium.Core.NavigationInfo.Normal;
+            this.wcMain.Size = new System.Drawing.Size(718, 461);
+            this.wcMain.Source = new System.Uri("about:blank", System.UriKind.Absolute);
+            this.wcMain.TabIndex = 16;
+            this.wcMain.ViewType = Awesomium.Core.WebViewType.Offscreen;
+            this.wcMain.ConsoleMessage += new Awesomium.Core.ConsoleMessageEventHandler(this.WcMainOnConsoleMessage);
+            // 
+            // webSessionProvider1
+            // 
+            this.webSessionProvider1.Views.Add(this.wcMain);
+            // 
+            // abUrl
+            // 
+            this.abUrl.AcceptsReturn = true;
+            this.abUrl.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
+            this.abUrl.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
+            this.abUrl.Location = new System.Drawing.Point(122, 566);
+            this.abUrl.Name = "abUrl";
+            this.abUrl.Size = new System.Drawing.Size(100, 20);
+            this.abUrl.TabIndex = 17;
+            this.abUrl.URL = null;
+            this.abUrl.WebControl = null;
+            // 
+            // button10
+            // 
+            this.button10.Location = new System.Drawing.Point(228, 563);
+            this.button10.Name = "button10";
+            this.button10.Size = new System.Drawing.Size(75, 23);
+            this.button10.TabIndex = 18;
+            this.button10.Text = "button10";
+            this.button10.UseVisualStyleBackColor = true;
+            this.button10.Click += new System.EventHandler(this.button10_Click);
+            // 
+            // button11
+            // 
+            this.button11.Location = new System.Drawing.Point(309, 566);
+            this.button11.Name = "button11";
+            this.button11.Size = new System.Drawing.Size(75, 23);
+            this.button11.TabIndex = 19;
+            this.button11.Text = "Save";
+            this.button11.UseVisualStyleBackColor = true;
+            this.button11.Click += new System.EventHandler(this.button11_Click);
+            // 
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(740, 571);
+            this.ClientSize = new System.Drawing.Size(740, 618);
+            this.Controls.Add(this.button11);
+            this.Controls.Add(this.button10);
+            this.Controls.Add(this.abUrl);
+            this.Controls.Add(this.wcMain);
+            this.Controls.Add(this.bMoveInject);
             this.Controls.Add(this.bInjectJQ);
             this.Controls.Add(this.tbXPath);
             this.Controls.Add(this.bRunJS);
@@ -232,19 +268,15 @@
             this.Controls.Add(this.button2);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.bLogin);
-            this.Controls.Add(this.wcMain);
-            this.Name = "Form1";
+            this.Name = "MainForm";
             this.Text = "Form1";
+            this.Shown += new System.EventHandler(this.MainForm_Shown);
             this.ResumeLayout(false);
             this.PerformLayout();
 
         }
 
         #endregion
-
-        private Awesomium.Windows.Forms.WebControl wcMain;
-        private Awesomium.Windows.Forms.WebSessionProvider webSessionProvider1;
-        private Awesomium.Windows.Forms.WebControlContextMenu webControlContextMenu1;
         private System.Windows.Forms.Button bLogin;
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.Button button2;
@@ -259,6 +291,12 @@
         private System.Windows.Forms.Button bRunJS;
         private System.Windows.Forms.TextBox tbXPath;
         private System.Windows.Forms.Button bInjectJQ;
+        private System.Windows.Forms.Button bMoveInject;
+        private Awesomium.Windows.Forms.WebControl wcMain;
+        private Awesomium.Windows.Forms.WebSessionProvider webSessionProvider1;
+        private Awesomium.Windows.Forms.AddressBox abUrl;
+        private System.Windows.Forms.Button button10;
+        private System.Windows.Forms.Button button11;
     }
 }
 
