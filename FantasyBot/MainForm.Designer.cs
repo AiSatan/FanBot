@@ -41,21 +41,17 @@
             this.button7 = new System.Windows.Forms.Button();
             this.tbJS = new System.Windows.Forms.TextBox();
             this.bRunJS = new System.Windows.Forms.Button();
-            this.tbXPath = new System.Windows.Forms.TextBox();
-            this.bInjectJQ = new System.Windows.Forms.Button();
-            this.bMoveInject = new System.Windows.Forms.Button();
             this.wcMain = new Awesomium.Windows.Forms.WebControl(this.components);
             this.webSessionProvider1 = new Awesomium.Windows.Forms.WebSessionProvider(this.components);
             this.abUrl = new Awesomium.Windows.Forms.AddressBox();
-            this.button10 = new System.Windows.Forms.Button();
-            this.button11 = new System.Windows.Forms.Button();
+            this.tbLog = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // bLogin
             // 
             this.bLogin.Location = new System.Drawing.Point(12, 482);
             this.bLogin.Name = "bLogin";
-            this.bLogin.Size = new System.Drawing.Size(75, 23);
+            this.bLogin.Size = new System.Drawing.Size(85, 78);
             this.bLogin.TabIndex = 1;
             this.bLogin.Text = "Login";
             this.bLogin.UseVisualStyleBackColor = true;
@@ -153,48 +149,22 @@
             // 
             // tbJS
             // 
-            this.tbJS.Location = new System.Drawing.Point(122, 482);
+            this.tbJS.Location = new System.Drawing.Point(103, 484);
             this.tbJS.Multiline = true;
             this.tbJS.Name = "tbJS";
-            this.tbJS.Size = new System.Drawing.Size(373, 50);
+            this.tbJS.Size = new System.Drawing.Size(373, 76);
             this.tbJS.TabIndex = 11;
+            this.tbJS.Text = "GetDirections();";
             // 
             // bRunJS
             // 
-            this.bRunJS.Location = new System.Drawing.Point(501, 482);
+            this.bRunJS.Location = new System.Drawing.Point(482, 484);
             this.bRunJS.Name = "bRunJS";
-            this.bRunJS.Size = new System.Drawing.Size(75, 49);
+            this.bRunJS.Size = new System.Drawing.Size(131, 76);
             this.bRunJS.TabIndex = 12;
             this.bRunJS.Text = "Run";
             this.bRunJS.UseVisualStyleBackColor = true;
             this.bRunJS.Click += new System.EventHandler(this.bRunJS_Click);
-            // 
-            // tbXPath
-            // 
-            this.tbXPath.Location = new System.Drawing.Point(122, 540);
-            this.tbXPath.Name = "tbXPath";
-            this.tbXPath.Size = new System.Drawing.Size(373, 20);
-            this.tbXPath.TabIndex = 13;
-            // 
-            // bInjectJQ
-            // 
-            this.bInjectJQ.Location = new System.Drawing.Point(501, 540);
-            this.bInjectJQ.Name = "bInjectJQ";
-            this.bInjectJQ.Size = new System.Drawing.Size(75, 21);
-            this.bInjectJQ.TabIndex = 14;
-            this.bInjectJQ.Text = "inject jq";
-            this.bInjectJQ.UseVisualStyleBackColor = true;
-            this.bInjectJQ.Click += new System.EventHandler(this.bInjectJQ_Click);
-            // 
-            // bMoveInject
-            // 
-            this.bMoveInject.Location = new System.Drawing.Point(12, 511);
-            this.bMoveInject.Name = "bMoveInject";
-            this.bMoveInject.Size = new System.Drawing.Size(85, 48);
-            this.bMoveInject.TabIndex = 15;
-            this.bMoveInject.Text = "Inject \"Move\" script";
-            this.bMoveInject.UseVisualStyleBackColor = true;
-            this.bMoveInject.Click += new System.EventHandler(this.bMoveInject_Click);
             // 
             // wcMain
             // 
@@ -203,10 +173,11 @@
             this.wcMain.Location = new System.Drawing.Point(12, 12);
             this.wcMain.NavigationInfo = Awesomium.Core.NavigationInfo.Normal;
             this.wcMain.Size = new System.Drawing.Size(718, 461);
-            this.wcMain.Source = new System.Uri("about:blank", System.UriKind.Absolute);
+            this.wcMain.Source = new System.Uri("http://fantasyland.ru/", System.UriKind.Absolute);
             this.wcMain.TabIndex = 16;
             this.wcMain.ViewType = Awesomium.Core.WebViewType.Offscreen;
             this.wcMain.ConsoleMessage += new Awesomium.Core.ConsoleMessageEventHandler(this.WcMainOnConsoleMessage);
+            this.wcMain.LoadingFrameComplete += new Awesomium.Core.FrameEventHandler(this.Awesomium_Windows_Forms_WebControl_LoadingFrameComplete);
             // 
             // webSessionProvider1
             // 
@@ -217,45 +188,29 @@
             this.abUrl.AcceptsReturn = true;
             this.abUrl.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.abUrl.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
-            this.abUrl.Location = new System.Drawing.Point(122, 566);
+            this.abUrl.Location = new System.Drawing.Point(12, 569);
             this.abUrl.Name = "abUrl";
-            this.abUrl.Size = new System.Drawing.Size(100, 20);
+            this.abUrl.Size = new System.Drawing.Size(163, 20);
             this.abUrl.TabIndex = 17;
             this.abUrl.URL = null;
             this.abUrl.WebControl = null;
             // 
-            // button10
+            // tbLog
             // 
-            this.button10.Location = new System.Drawing.Point(228, 563);
-            this.button10.Name = "button10";
-            this.button10.Size = new System.Drawing.Size(75, 23);
-            this.button10.TabIndex = 18;
-            this.button10.Text = "button10";
-            this.button10.UseVisualStyleBackColor = true;
-            this.button10.Click += new System.EventHandler(this.button10_Click);
-            // 
-            // button11
-            // 
-            this.button11.Location = new System.Drawing.Point(309, 566);
-            this.button11.Name = "button11";
-            this.button11.Size = new System.Drawing.Size(75, 23);
-            this.button11.TabIndex = 19;
-            this.button11.Text = "Save";
-            this.button11.UseVisualStyleBackColor = true;
-            this.button11.Click += new System.EventHandler(this.button11_Click);
+            this.tbLog.Location = new System.Drawing.Point(12, 595);
+            this.tbLog.Multiline = true;
+            this.tbLog.Name = "tbLog";
+            this.tbLog.Size = new System.Drawing.Size(716, 101);
+            this.tbLog.TabIndex = 20;
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(740, 618);
-            this.Controls.Add(this.button11);
-            this.Controls.Add(this.button10);
+            this.ClientSize = new System.Drawing.Size(740, 708);
+            this.Controls.Add(this.tbLog);
             this.Controls.Add(this.abUrl);
             this.Controls.Add(this.wcMain);
-            this.Controls.Add(this.bMoveInject);
-            this.Controls.Add(this.bInjectJQ);
-            this.Controls.Add(this.tbXPath);
             this.Controls.Add(this.bRunJS);
             this.Controls.Add(this.tbJS);
             this.Controls.Add(this.button9);
@@ -270,7 +225,6 @@
             this.Controls.Add(this.bLogin);
             this.Name = "MainForm";
             this.Text = "Form1";
-            this.Shown += new System.EventHandler(this.MainForm_Shown);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -289,14 +243,10 @@
         private System.Windows.Forms.Button button7;
         private System.Windows.Forms.TextBox tbJS;
         private System.Windows.Forms.Button bRunJS;
-        private System.Windows.Forms.TextBox tbXPath;
-        private System.Windows.Forms.Button bInjectJQ;
-        private System.Windows.Forms.Button bMoveInject;
         private Awesomium.Windows.Forms.WebControl wcMain;
         private Awesomium.Windows.Forms.WebSessionProvider webSessionProvider1;
         private Awesomium.Windows.Forms.AddressBox abUrl;
-        private System.Windows.Forms.Button button10;
-        private System.Windows.Forms.Button button11;
+        private System.Windows.Forms.TextBox tbLog;
     }
 }
 

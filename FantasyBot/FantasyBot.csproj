@@ -126,16 +126,7 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="js\InjectJQuery.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="js\LigaH.user.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="js\Main.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="js\Move.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Scripts\jquery-2.1.3.intellisense.js" />
@@ -143,20 +134,10 @@
     <Content Include="Scripts\jquery-2.1.3.min.js" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="js\Logon.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\FantasyBot.Logics\FantasyBot.Logics.csproj">
-      <Project>{77bf1658-bff1-49aa-acba-b158271ae5fa}</Project>
-      <Name>FantasyBot.Logics</Name>
+    <ProjectReference Include="..\FantasyBot.Context\FantasyBot.Context.csproj">
+      <Project>{05DDC604-4620-43A3-9176-FBF8E73A2F44}</Project>
+      <Name>FantasyBot.Context</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="js\Navigation.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("FantasyBot.Logics")]
+[assembly: AssemblyTitle("FantasyBot.Context")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("FantasyBot.Logics")]
+[assembly: AssemblyProduct("FantasyBot.Context")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
@@ -20,7 +20,7 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 
 // The following GUID is for the ID of the typelib if this project is exposed to COM
-[assembly: Guid("77bf1658-bff1-49aa-acba-b158271ae5fa")]
+[assembly: Guid("05ddc604-4620-43a3-9176-fbf8e73a2f44")]
 
 // Version information for an assembly consists of the following four values:
 //
