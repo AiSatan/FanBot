@@ -59,7 +59,7 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(619, 479);
+            this.button1.Location = new System.Drawing.Point(619, 508);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(33, 23);
             this.button1.TabIndex = 2;
@@ -69,7 +69,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(658, 479);
+            this.button2.Location = new System.Drawing.Point(695, 508);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(33, 23);
             this.button2.TabIndex = 3;
@@ -79,7 +79,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(697, 479);
+            this.button3.Location = new System.Drawing.Point(658, 480);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(33, 23);
             this.button3.TabIndex = 4;
@@ -89,7 +89,7 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(619, 509);
+            this.button4.Location = new System.Drawing.Point(658, 538);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(33, 23);
             this.button4.TabIndex = 5;
@@ -109,7 +109,7 @@
             // 
             // button6
             // 
-            this.button6.Location = new System.Drawing.Point(697, 508);
+            this.button6.Location = new System.Drawing.Point(695, 480);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(33, 23);
             this.button6.TabIndex = 7;
@@ -129,7 +129,7 @@
             // 
             // button8
             // 
-            this.button8.Location = new System.Drawing.Point(658, 538);
+            this.button8.Location = new System.Drawing.Point(619, 538);
             this.button8.Name = "button8";
             this.button8.Size = new System.Drawing.Size(33, 23);
             this.button8.TabIndex = 9;
@@ -139,7 +139,7 @@
             // 
             // button7
             // 
-            this.button7.Location = new System.Drawing.Point(619, 538);
+            this.button7.Location = new System.Drawing.Point(619, 479);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(33, 23);
             this.button7.TabIndex = 8;
@@ -175,7 +175,6 @@
             this.wcMain.Size = new System.Drawing.Size(718, 461);
             this.wcMain.Source = new System.Uri("http://fantasyland.ru/", System.UriKind.Absolute);
             this.wcMain.TabIndex = 16;
-            this.wcMain.ViewType = Awesomium.Core.WebViewType.Offscreen;
             this.wcMain.ConsoleMessage += new Awesomium.Core.ConsoleMessageEventHandler(this.WcMainOnConsoleMessage);
             this.wcMain.LoadingFrameComplete += new Awesomium.Core.FrameEventHandler(this.Awesomium_Windows_Forms_WebControl_LoadingFrameComplete);
             // 

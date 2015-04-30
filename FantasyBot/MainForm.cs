@@ -20,12 +20,12 @@ namespace FantasyBot
 
         public void SerToJson()
         {
-//            var obj = JsonConvert.SerializeObject(Points);
-//            File.WriteAllText(@"points.json", obj);
+            //            var obj = JsonConvert.SerializeObject(Points);
+            //            File.WriteAllText(@"points.json", obj);
         }
+        static Dictionary<string, CurrentPoint> Points { get; } = new Dictionary<string, CurrentPoint>();
 
-        Dictionary<string, CurrentPoint> Points { get; set; } = new Dictionary<string, CurrentPoint>();
-
+        private CurrentPoint _activePoint;
 
         private void WcMainOnConsoleMessage(object sender, ConsoleMessageEventArgs e)
         {
@@ -35,49 +35,64 @@ namespace FantasyBot
 
                 if (message.StartsWith("Frame: "))
                 {
-                    var point = BaseLogic.CreatePoint(message);
-
-                    if (!Points.ContainsKey(point.Name))
-                        Points.Add(point.Name, point);
-
-                    foreach (var direction in point.Directions)
+                    if (_activePoint == null)
                     {
-                        switch (direction)
-                        {
-                            case Directions.Up:
-                            {
-                                var nPoint = new Point(point.Location.X, point.Location.Y - 1);
-                                if (Points.ContainsKey(nPoint.ToString()))
-                                    continue;
-                                break;
-                            }
-                            case Directions.Down:
-                            {
-                                var nPoint = new Point(point.Location.X, point.Location.Y + 1);
-                                if (Points.ContainsKey(nPoint.ToString()))
-                                    continue;
-                                break;
-                            }
-                            case Directions.Left:
-                            {
-                                var nPoint = new Point(point.Location.X - 1, point.Location.Y);
-                                if (Points.ContainsKey(nPoint.ToString()))
-                                    continue;
-                                break;
-                            }
-                            case Directions.Rigth:
-                            {
-                                var nPoint = new Point(point.Location.X + 1, point.Location.Y);
-                                if (Points.ContainsKey(nPoint.ToString()))
-                                    continue;
-                                break;
-                            }
-                            default:
-                                continue;
-                        }
-                        abUrl.RunJs("MoveTo(" + (int) direction + ");");
-                        return;
+                        _activePoint = BaseLogic.CreatePoint(abUrl);
                     }
+                    _activePoint = BaseLogic.UpdatePoint(_activePoint, message);
+
+                    if (!Points.ContainsKey(_activePoint.Name))
+                    {
+                        Points.Add(_activePoint.Name, _activePoint);
+                        _activePoint = _activePoint.Move();
+                    }
+                    else
+                    {
+                        _activePoint.Return();
+                    }
+
+                    //if (!Points.ContainsKey(point.Name))
+                    //    Points.Add(point.Name, point);
+
+                    /*                    foreach (var direction in point.Directions)
+                                        {
+                                            switch (direction)
+                                            {
+                                                case Directions.Up:
+                                                {
+                                                    var nPoint = new Point(point.Location.X, point.Location.Y - 1);
+                                                    if (Points.ContainsKey(nPoint.ToString()))
+                                                        continue;
+                                                    break;
+                                                }
+                                                case Directions.Down:
+                                                {
+                                                    var nPoint = new Point(point.Location.X, point.Location.Y + 1);
+                                                    if (Points.ContainsKey(nPoint.ToString()))
+                                                        continue;
+                                                    break;
+                                                }
+                                                case Directions.Left:
+                                                {
+                                                    var nPoint = new Point(point.Location.X - 1, point.Location.Y);
+                                                    if (Points.ContainsKey(nPoint.ToString()))
+                                                        continue;
+                                                    break;
+                                                }
+                                                case Directions.Rigth:
+                                                {
+                                                    var nPoint = new Point(point.Location.X + 1, point.Location.Y);
+                                                    if (Points.ContainsKey(nPoint.ToString()))
+                                                        continue;
+                                                    break;
+                                                }
+                                                default:
+                                                    continue;
+                                            }
+                                            abUrl.RunJs("MoveTo(" + (int) direction + ");");
+                                            return;
+                                        }*/
+                    return;
                 }
 
                 if (message.StartsWith("Run: "))
@@ -156,7 +171,7 @@ namespace FantasyBot
             try
             {
                 bRunJS.BackColor = Color.Lime;
-                
+
             }
             catch (Exception)
             {

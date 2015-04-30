@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using Awesomium.Windows.Forms;
 
 namespace FantasyBot.Context
 {
@@ -37,11 +38,13 @@ namespace FantasyBot.Context
                 foreach (var activeBtn in from Match mathc in mathces
                                           select mathc.Groups[1].Value)
                 {
-                    Directions res;
-                    if (Enum.TryParse(activeBtn, out res))
-                    {
-                        point.Directions.Add(res);
-                    }
+                    Direction res;
+                    if (!Enum.TryParse(activeBtn, out res))
+                        continue;
+                    //ignore refresh button
+                    if(res == Direction.Refresh)
+                        continue;
+                    point.Directions.Add(res);
                 }
             }
             catch
@@ -50,13 +53,17 @@ namespace FantasyBot.Context
             }
         }
 
-        public static CurrentPoint CreatePoint(string message)
+        public static CurrentPoint CreatePoint(AddressBox control)
         {
-            var point = new CurrentPoint
+            var point = new CurrentPoint(null, control)
             {
-                Directions = new List<Directions>()
+                ParentPath = Direction.Refresh
             };
+            return point;
+        }
 
+        public static CurrentPoint UpdatePoint(CurrentPoint point, string message)
+        {
             GetDirections(message, ref point);
             GetLocation(message, ref point);
             return point;

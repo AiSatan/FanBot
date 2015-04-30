@@ -1,11 +1,12 @@
 ﻿namespace FantasyBot.Context
 {
-    public enum Directions
+    public enum Direction
     {
-        Up = 3,
-        Down = 4,
         Left = 1,
         Rigth = 2,
+        Up = 3,
+        Down = 4,
+        Exit = 7,
         Refresh = 0
     }
 }

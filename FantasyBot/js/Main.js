@@ -32,8 +32,8 @@ function MoveTo(direction) {
 }
 
 function Logon() {
-	$("input[name='login']").prop("value", "AiTest");
-	$("input[name='password']").prop("value", "adminRam");
-	//domen method
-	Login();
+    $("input[name='login']").prop("value", "AiTest");
+    $("input[name='password']").prop("value", "adminRam");
+    //domen method
+    Login();
 }
