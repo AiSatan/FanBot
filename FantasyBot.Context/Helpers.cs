@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Windows.Forms;
 using Awesomium.Windows.Forms;
@@ -42,12 +43,17 @@ namespace FantasyBot.Context
             }
         }
 
+
         public static void Delete(this List<Direction> directions, Direction item)
         {
             if (!directions.Remove(item))
                 throw new InvalidOperationException();
         }
 
+        public static string GetName(this Point point)
+        {
+            return $"{point.X}&{point.Y}";
+        }
 
         /// <summary>
         /// Инвертирует путь

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -23,9 +24,10 @@ namespace FantasyBot
             //            var obj = JsonConvert.SerializeObject(Points);
             //            File.WriteAllText(@"points.json", obj);
         }
-        static Dictionary<string, CurrentPoint> Points { get; } = new Dictionary<string, CurrentPoint>();
+        
 
         private CurrentPoint _activePoint;
+        private MapForm _map;
 
         private void WcMainOnConsoleMessage(object sender, ConsoleMessageEventArgs e)
         {
@@ -35,63 +37,42 @@ namespace FantasyBot
 
                 if (message.StartsWith("Frame: "))
                 {
+                    Debug.WriteLine($"OnConsole: {_activePoint?.Name},{_activePoint?.ParentPath}, {_activePoint?.Directions?.Count}");
                     if (_activePoint == null)
                     {
                         _activePoint = BaseLogic.CreatePoint(abUrl);
+                        CurrentPoint.OnMove += _map.OnMove;
                     }
                     _activePoint = BaseLogic.UpdatePoint(_activePoint, message);
-
-                    if (!Points.ContainsKey(_activePoint.Name))
+                    _map.WritePoint(_activePoint.Location, _activePoint.Directions);
+                    if (!CurrentPoint.Points.ContainsKey(_activePoint.Name))
                     {
-                        Points.Add(_activePoint.Name, _activePoint);
+                        Debug.WriteLine($"OnConsole: Not contains {_activePoint?.Name}");
+                        CurrentPoint.Points.Add(_activePoint.Name, _activePoint);
+                        Debug.WriteLine($"OnConsole: before Move {_activePoint?.Name}");
                         _activePoint = _activePoint.Move();
+                        Debug.WriteLine($"OnConsole: after Move {_activePoint?.Name}");
                     }
                     else
                     {
-                        _activePoint.Return();
+                        Debug.WriteLine($"OnConsole: Contains {_activePoint?.Name}");
+                        var temp = _activePoint.Return();
+                        Debug.WriteLine($"OnConsole: after return {_activePoint?.Name} and {temp?.Name}");
+                        if (temp?.Location != _activePoint.Location)
+                        {
+                            Debug.WriteLine($"OnConsole: not eq = {_activePoint?.Name} & {temp?.Name}");
+                            _activePoint = temp;
+                        }
+                        else
+                        {
+                            Debug.WriteLine($"OnConsole: eq = {_activePoint?.Name} & {temp?.Name}");
+                            _activePoint = temp;
+                            Debug.WriteLine($"OnConsole: eq - before move {_activePoint?.Name}");
+                            _activePoint?.Move();
+                            Debug.WriteLine($"OnConsole: eq - after move {_activePoint?.Name}");
+                        }
+                        Debug.WriteLine($"OnConsole: after return and move {_activePoint?.Name}");
                     }
-
-                    //if (!Points.ContainsKey(point.Name))
-                    //    Points.Add(point.Name, point);
-
-                    /*                    foreach (var direction in point.Directions)
-                                        {
-                                            switch (direction)
-                                            {
-                                                case Directions.Up:
-                                                {
-                                                    var nPoint = new Point(point.Location.X, point.Location.Y - 1);
-                                                    if (Points.ContainsKey(nPoint.ToString()))
-                                                        continue;
-                                                    break;
-                                                }
-                                                case Directions.Down:
-                                                {
-                                                    var nPoint = new Point(point.Location.X, point.Location.Y + 1);
-                                                    if (Points.ContainsKey(nPoint.ToString()))
-                                                        continue;
-                                                    break;
-                                                }
-                                                case Directions.Left:
-                                                {
-                                                    var nPoint = new Point(point.Location.X - 1, point.Location.Y);
-                                                    if (Points.ContainsKey(nPoint.ToString()))
-                                                        continue;
-                                                    break;
-                                                }
-                                                case Directions.Rigth:
-                                                {
-                                                    var nPoint = new Point(point.Location.X + 1, point.Location.Y);
-                                                    if (Points.ContainsKey(nPoint.ToString()))
-                                                        continue;
-                                                    break;
-                                                }
-                                                default:
-                                                    continue;
-                                            }
-                                            abUrl.RunJs("MoveTo(" + (int) direction + ");");
-                                            return;
-                                        }*/
                     return;
                 }
 
@@ -191,6 +172,12 @@ namespace FantasyBot
 
             abUrl.RunJs("Main.js".GetJsCode());
             abUrl.RunJs("InjectJquery('https://code.jquery.com/jquery-2.1.3.js');");
+        }
+
+        private void MainForm_Load(object sender, EventArgs e)
+        {
+            _map = new MapForm();
+            _map.Show();
         }
     }
 }

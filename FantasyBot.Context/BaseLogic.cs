@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -22,6 +23,7 @@ namespace FantasyBot.Context
                 {
                     point.Location = new Point(Convert.ToInt32(dw[0].Trim()), Convert.ToInt32(dw[1].Trim()));
                 }
+                Debug.WriteLine($"OnGetLocation: {point?.Name},{point?.ParentPath}, {point?.Directions?.Count}");
             }
             catch
             {
@@ -33,6 +35,7 @@ namespace FantasyBot.Context
         {
             try
             {
+                point.Directions = new List<Direction>();
                 var reg = new Regex("goTo\\(([\\d])\\)");
                 var mathces = reg.Matches(message);
                 foreach (var activeBtn in from Match mathc in mathces
@@ -44,8 +47,11 @@ namespace FantasyBot.Context
                     //ignore refresh button
                     if(res == Direction.Refresh)
                         continue;
+                    if (res == Direction.Exit)
+                        continue;
                     point.Directions.Add(res);
                 }
+                Debug.WriteLine($"OnGetDirections: {point?.Name},{point?.ParentPath}, {point?.Directions?.Count}");
             }
             catch
             {
@@ -55,16 +61,16 @@ namespace FantasyBot.Context
 
         public static CurrentPoint CreatePoint(AddressBox control)
         {
-            var point = new CurrentPoint(null, control)
-            {
-                ParentPath = Direction.Refresh
-            };
+            var point = new CurrentPoint(null, control, Direction.Refresh);
+            Debug.WriteLine($"OnCreatePoint: {point.Name},{point.ParentPath}, {point.Directions?.Count}");
             return point;
         }
 
         public static CurrentPoint UpdatePoint(CurrentPoint point, string message)
         {
-            GetDirections(message, ref point);
+            Debug.WriteLine($"OnUpdate: {point?.Name},{point?.ParentPath}, {point?.Directions?.Count}");
+            if (point?.Directions == null)
+                GetDirections(message, ref point);
             GetLocation(message, ref point);
             return point;
         }
