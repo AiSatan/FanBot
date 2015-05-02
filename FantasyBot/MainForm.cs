@@ -40,39 +40,23 @@ namespace FantasyBot
                     Debug.WriteLine($"OnConsole: {_activePoint?.Name},{_activePoint?.ParentPath}, {_activePoint?.Directions?.Count}");
                     if (_activePoint == null)
                     {
+                        //Если точка первая, создаем ее
                         _activePoint = BaseLogic.CreatePoint(abUrl);
                         CurrentPoint.OnMove += _map.OnMove;
                     }
+                    //обновляем точку, не обновляем Directions если он уже есть
                     _activePoint = BaseLogic.UpdatePoint(_activePoint, message);
-                    _map.WritePoint(_activePoint.Location, _activePoint.Directions);
+
+ /*                   //проверяем были ли мы на этой точке раньше
+                    if (!CurrentPoint.Points.ContainsKey(_activePoint.Name))
+                    {*/
+                        Debug.WriteLine($"OnConsole: Not contains {_activePoint?.Name}");
                     if (!CurrentPoint.Points.ContainsKey(_activePoint.Name))
                     {
-                        Debug.WriteLine($"OnConsole: Not contains {_activePoint?.Name}");
+
                         CurrentPoint.Points.Add(_activePoint.Name, _activePoint);
-                        Debug.WriteLine($"OnConsole: before Move {_activePoint?.Name}");
-                        _activePoint = _activePoint.Move();
-                        Debug.WriteLine($"OnConsole: after Move {_activePoint?.Name}");
                     }
-                    else
-                    {
-                        Debug.WriteLine($"OnConsole: Contains {_activePoint?.Name}");
-                        var temp = _activePoint.Return();
-                        Debug.WriteLine($"OnConsole: after return {_activePoint?.Name} and {temp?.Name}");
-                        if (temp?.Location != _activePoint.Location)
-                        {
-                            Debug.WriteLine($"OnConsole: not eq = {_activePoint?.Name} & {temp?.Name}");
-                            _activePoint = temp;
-                        }
-                        else
-                        {
-                            Debug.WriteLine($"OnConsole: eq = {_activePoint?.Name} & {temp?.Name}");
-                            _activePoint = temp;
-                            Debug.WriteLine($"OnConsole: eq - before move {_activePoint?.Name}");
-                            _activePoint?.Move();
-                            Debug.WriteLine($"OnConsole: eq - after move {_activePoint?.Name}");
-                        }
-                        Debug.WriteLine($"OnConsole: after return and move {_activePoint?.Name}");
-                    }
+
                     return;
                 }
 

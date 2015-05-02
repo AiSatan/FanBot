@@ -10,10 +10,24 @@ using Awesomium.Windows.Forms;
 
 namespace FantasyBot.Context
 {
-    public class CurrentPoint
+    public class CurrentPoint : IGPoint
     {
-        private readonly AddressBox _control;
+        /// <summary>
+        /// Создание новой точки
+        /// </summary>
+        /// <param name="parentPoint">точка предок</param>
+        /// <param name="control">элемент управления</param>
+        /// <param name="parentPath">направление по которому пришли к этой точке</param>
+        public CurrentPoint(CurrentPoint parentPoint, AddressBox control, Direction parentPath)
+        {
+            Debug.WriteLine($"CurrentPoint, создаем точку, parent {parentPoint?.Name}");
 
+            ParentPath = parentPath;
+            _control = control;
+            _parentPoint = parentPoint;
+        }
+
+        #region IGPoint
         /// <summary>
         /// Имя точки
         /// </summary>
@@ -41,41 +55,59 @@ namespace FantasyBot.Context
             }
         }
 
-        public CurrentPoint(CurrentPoint parentPoint, AddressBox control, Direction parentPath)
-        {
-            Debug.WriteLine($"CurrentPoint constructor: {parentPath},{parentPoint?.Name}");
-
-            ParentPath = parentPath;
-            _control = control;
-            _parentPoint = parentPoint;
-        }
-
+        /// <summary>
+        /// Перемещает на шаг вперед и возвращает 
+        /// новую точку с данным предком
+        /// </summary>
+        /// <returns></returns>
         public CurrentPoint Move()
         {
-            Debug.WriteLine($"OnMove: {this?.Name},{this?.ParentPath}, {this?.Directions?.Count}");
-
-            if (Directions == null)
-                return Return();
-
-            Directions.Remove(_path);
-            Debug.WriteLine($"OnMove: {this?.Name},{this?.ParentPath}, {this?.Directions?.Count} - remove - {_path}");
-
+            //создаем новую точку
+            var child = new CurrentPoint(this, _control, Direction.Refresh);
+            //поолучаем следующию точку
             var direction = GetNextPoint();
-            if (direction == default(Direction))
-            {
-                Debug.WriteLine($"OnMove: {this?.Name},{this?.ParentPath}, {this?.Directions?.Count} - {string.Join(";", this?.Directions)} - direction not found");
-                return Return();
-            }
-            Debug.WriteLine($"OnMove: {this?.Name},{this?.ParentPath}, {this?.Directions?.Count}: {string.Join(";", this?.Directions)} - direction found - {direction}");
-
-            var currentPoint = new CurrentPoint(this, _control, direction);
-            Debug.WriteLine($"OnMove: new point: {currentPoint?.Name},{currentPoint?.ParentPath}, {currentPoint?.Directions?.Count} - move to - {direction}");
-
+            //устанавливаем
+            child.ParentPath = direction;
             Move(direction);
-            return currentPoint;
+            RemoveDirection(direction);
+            return child;
         }
 
-        public Direction GetNextPoint()
+        /// <summary>
+        /// Возвращаемся на шаг назад
+        /// </summary>
+        /// <returns>Родительская точка</returns>
+        public CurrentPoint Return()
+        {
+            Move(ParentPath);
+            return _parentPoint;
+        }
+        #endregion
+
+        /// <summary>
+        /// Движение
+        /// </summary>
+        /// <param name="direction">Направление</param>
+        private void Move(Direction direction)
+        {
+            Debug.WriteLine($"Move Func: this point: {this?.Name}, parent: {this?.ParentPath}, dir.Count: {this?.Directions?.Count}: {String.Join("; ", this?.Directions)} moving to - {direction}");
+            //вызываем событие
+            OnMove?.Invoke(this, direction);
+            //двигаемся
+            _control.RunJs("MoveTo(" + (int)direction + ");");
+        }
+
+        private void RemoveDirection(Direction direction)
+        {
+            //удаляем у данной точки это направление, оно нам более не нужно
+            Directions?.Remove(direction);
+        }
+
+        /// <summary>
+        /// Возвращает первое возможное направление
+        /// </summary>
+        /// <returns>Направление</returns>
+        private Direction GetNextPoint()
         {
             Directions.Sort();
             foreach (var direction in Directions)
@@ -107,36 +139,11 @@ namespace FantasyBot.Context
             return default(Direction);
         }
 
-        public CurrentPoint Return()
-        {
-            Debug.WriteLine($"OnReturn: {this?.Name},{this?.ParentPath}, {this?.Directions?.Count}");
-            if (Directions == null)
-                return this;
-            var direction = Directions.FirstOrDefault();
-            if (direction == default(Direction))
-            {
-                Debug.WriteLine($"OnReturn: Direction Not Found: {this?.Name},{this?.ParentPath}, {this?.Directions?.Count}: {String.Join(";", this?.Directions)}");
-                Move(ParentPath);
-                return _parentPoint;
-            }
-            //Directions.Delete(direction);
-            Debug.WriteLine($"OnReturn: Direction Found: {this?.Name},{this?.ParentPath}, {this?.Directions?.Count}: {String.Join(";", this?.Directions)}");
-            return this;
-        }
-
-        private void Move(Direction direction)
-        {
-            Debug.WriteLine($"Move Func: {this?.Name},{this?.ParentPath}, {this?.Directions?.Count}: {String.Join(";", this?.Directions)} to - {direction}");
-            Directions?.Remove(direction);
-
-            OnMove?.Invoke(this, direction);
-            _control.RunJs("MoveTo(" + (int)direction + ");");
-        }
-
         public static event MoveEventHandler OnMove = delegate { };
         private Direction _path;
         private readonly CurrentPoint _parentPoint;
         public static Dictionary<string, CurrentPoint> Points { get; } = new Dictionary<string, CurrentPoint>();
+        private readonly AddressBox _control;
     }
 
     public delegate void MoveEventHandler(object sender, Direction direction);
