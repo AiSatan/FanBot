@@ -33,37 +33,36 @@ namespace FantasyBot
 
         public void WritePoint(Point location, List<Direction> directs)
         {
-            var x = location.X * 4;
-            var y = location.Y * 4;
-            Color color;
-            switch (directs.Count)
+            try
             {
-                case 0:
-                    color = Color.Black;
-                    break;
-                case 1:
-                    color = Color.Green;
-                    break;
-                case 2:
-                    color = Color.DarkOrange;
-                    break;
-                case 3:
-                    color = Color.Red;
-                    break;
-
-                default:
-                    return;
-            }
-            for (var mx = 0; mx < 4; mx++)
-            {
-                for (var my = 0; my < 4; my++)
+                var x = location.X*4;
+                var y = location.Y*4;
+                Color color;
+                switch (directs?.Count)
                 {
-                    _map.SetPixel(x - mx, y - my, color);
+                    case 0:
+                    case 1:
+                        color = Color.Black;
+                        break;
+                    default:
+                        color = Color.Green;
+                        break;
                 }
+                for (var mx = 0; mx < 4; mx++)
+                {
+                    for (var my = 0; my < 4; my++)
+                    {
+                        _map.SetPixel(x - mx, y - my, color);
+                    }
+                }
+                _map.SetPixel(x, y, color);
+                _map.SetPixel(x, y, color);
+                UpdateMap();
             }
-            _map.SetPixel(x, y, color);
-            _map.SetPixel(x, y, color);
-            UpdateMap();
+            catch (Exception ex)
+            {
+                BaseLogic.ExceptionCatch(ex);
+            }
         }
 
         public void OnMove(object sender, Direction direction)

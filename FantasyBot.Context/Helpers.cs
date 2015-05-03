@@ -25,9 +25,9 @@ namespace FantasyBot.Context
             {
                 abUrl.ThreadSafe(() => { abUrl.URL = new Uri($"javascript:{jsCode}"); });
             }
-            catch
+            catch (Exception ex)
             {
-                // ignored
+                BaseLogic.ExceptionCatch(ex);
             }
         }
 

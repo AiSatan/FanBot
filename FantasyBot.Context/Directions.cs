@@ -4,8 +4,8 @@
     {
         Left = 1,
         Rigth = 2,
-        Up = 3,
-        Down = 4,
+        Up = 4,
+        Down = 3,
         Exit = 7,
         Refresh = 0
     }

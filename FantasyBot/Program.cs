@@ -24,7 +24,11 @@ namespace FantasyBot
             catch (Exception ex)
             {
                 Debug.WriteLine(ex.Message);
-                Main();
+                if (MessageBox.Show(ex.Message, "Ошибка запуска, перезапустить?", MessageBoxButtons.YesNo,
+                        MessageBoxIcon.Error) == DialogResult.Yes)
+                {
+                    Application.Restart();
+                }
             }
         }
     }

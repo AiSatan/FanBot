@@ -29,140 +29,49 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.bLogin = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.button4 = new System.Windows.Forms.Button();
-            this.button5 = new System.Windows.Forms.Button();
-            this.button6 = new System.Windows.Forms.Button();
-            this.button9 = new System.Windows.Forms.Button();
-            this.button8 = new System.Windows.Forms.Button();
-            this.button7 = new System.Windows.Forms.Button();
             this.tbJS = new System.Windows.Forms.TextBox();
             this.bRunJS = new System.Windows.Forms.Button();
             this.wcMain = new Awesomium.Windows.Forms.WebControl(this.components);
             this.webSessionProvider1 = new Awesomium.Windows.Forms.WebSessionProvider(this.components);
             this.abUrl = new Awesomium.Windows.Forms.AddressBox();
             this.tbLog = new System.Windows.Forms.TextBox();
+            this.lStatus = new System.Windows.Forms.Label();
+            this.tStep = new System.Windows.Forms.Timer(this.components);
+            this.bStart = new System.Windows.Forms.Button();
+            this.nudStepTime = new System.Windows.Forms.NumericUpDown();
+            this.lMoveSpeed = new System.Windows.Forms.Label();
+            this.bSetSpeed = new System.Windows.Forms.Button();
+            ((System.ComponentModel.ISupportInitialize)(this.nudStepTime)).BeginInit();
             this.SuspendLayout();
             // 
             // bLogin
             // 
-            this.bLogin.Location = new System.Drawing.Point(12, 482);
+            this.bLogin.Location = new System.Drawing.Point(12, 484);
             this.bLogin.Name = "bLogin";
-            this.bLogin.Size = new System.Drawing.Size(85, 78);
+            this.bLogin.Size = new System.Drawing.Size(85, 41);
             this.bLogin.TabIndex = 1;
             this.bLogin.Text = "Login";
             this.bLogin.UseVisualStyleBackColor = true;
             this.bLogin.Click += new System.EventHandler(this.bLogin_Click);
             // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(619, 508);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(33, 23);
-            this.button1.TabIndex = 2;
-            this.button1.Text = "1";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.buttonMove_Click);
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(695, 508);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(33, 23);
-            this.button2.TabIndex = 3;
-            this.button2.Text = "2";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.buttonMove_Click);
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(658, 480);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(33, 23);
-            this.button3.TabIndex = 4;
-            this.button3.Text = "3";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.buttonMove_Click);
-            // 
-            // button4
-            // 
-            this.button4.Location = new System.Drawing.Point(658, 538);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(33, 23);
-            this.button4.TabIndex = 5;
-            this.button4.Text = "4";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.buttonMove_Click);
-            // 
-            // button5
-            // 
-            this.button5.Location = new System.Drawing.Point(658, 509);
-            this.button5.Name = "button5";
-            this.button5.Size = new System.Drawing.Size(33, 23);
-            this.button5.TabIndex = 6;
-            this.button5.Text = "5";
-            this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.buttonMove_Click);
-            // 
-            // button6
-            // 
-            this.button6.Location = new System.Drawing.Point(695, 480);
-            this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(33, 23);
-            this.button6.TabIndex = 7;
-            this.button6.Text = "6";
-            this.button6.UseVisualStyleBackColor = true;
-            this.button6.Click += new System.EventHandler(this.buttonMove_Click);
-            // 
-            // button9
-            // 
-            this.button9.Location = new System.Drawing.Point(697, 537);
-            this.button9.Name = "button9";
-            this.button9.Size = new System.Drawing.Size(33, 23);
-            this.button9.TabIndex = 10;
-            this.button9.Text = "9";
-            this.button9.UseVisualStyleBackColor = true;
-            this.button9.Click += new System.EventHandler(this.buttonMove_Click);
-            // 
-            // button8
-            // 
-            this.button8.Location = new System.Drawing.Point(619, 538);
-            this.button8.Name = "button8";
-            this.button8.Size = new System.Drawing.Size(33, 23);
-            this.button8.TabIndex = 9;
-            this.button8.Text = "8";
-            this.button8.UseVisualStyleBackColor = true;
-            this.button8.Click += new System.EventHandler(this.buttonMove_Click);
-            // 
-            // button7
-            // 
-            this.button7.Location = new System.Drawing.Point(619, 479);
-            this.button7.Name = "button7";
-            this.button7.Size = new System.Drawing.Size(33, 23);
-            this.button7.TabIndex = 8;
-            this.button7.Text = "7";
-            this.button7.UseVisualStyleBackColor = true;
-            this.button7.Click += new System.EventHandler(this.buttonMove_Click);
-            // 
             // tbJS
             // 
-            this.tbJS.Location = new System.Drawing.Point(103, 484);
+            this.tbJS.Location = new System.Drawing.Point(194, 484);
             this.tbJS.Multiline = true;
             this.tbJS.Name = "tbJS";
-            this.tbJS.Size = new System.Drawing.Size(373, 76);
+            this.tbJS.Size = new System.Drawing.Size(399, 41);
             this.tbJS.TabIndex = 11;
             this.tbJS.Text = "GetDirections();";
             // 
             // bRunJS
             // 
-            this.bRunJS.Location = new System.Drawing.Point(482, 484);
+            this.bRunJS.Location = new System.Drawing.Point(599, 484);
             this.bRunJS.Name = "bRunJS";
-            this.bRunJS.Size = new System.Drawing.Size(131, 76);
+            this.bRunJS.Size = new System.Drawing.Size(131, 41);
             this.bRunJS.TabIndex = 12;
-            this.bRunJS.Text = "Run";
+            this.bRunJS.Text = "<< Run current \r\nSCRIPT";
             this.bRunJS.UseVisualStyleBackColor = true;
             this.bRunJS.Click += new System.EventHandler(this.bRunJS_Click);
             // 
@@ -187,44 +96,112 @@
             this.abUrl.AcceptsReturn = true;
             this.abUrl.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.abUrl.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.CustomSource;
-            this.abUrl.Location = new System.Drawing.Point(12, 569);
+            this.abUrl.Location = new System.Drawing.Point(567, 453);
             this.abUrl.Name = "abUrl";
+            this.abUrl.ReadOnly = true;
             this.abUrl.Size = new System.Drawing.Size(163, 20);
             this.abUrl.TabIndex = 17;
             this.abUrl.URL = null;
+            this.abUrl.Visible = false;
             this.abUrl.WebControl = null;
             // 
             // tbLog
             // 
-            this.tbLog.Location = new System.Drawing.Point(12, 595);
+            this.tbLog.Location = new System.Drawing.Point(12, 599);
             this.tbLog.Multiline = true;
             this.tbLog.Name = "tbLog";
-            this.tbLog.Size = new System.Drawing.Size(716, 101);
+            this.tbLog.ReadOnly = true;
+            this.tbLog.Size = new System.Drawing.Size(716, 111);
             this.tbLog.TabIndex = 20;
+            // 
+            // lStatus
+            // 
+            this.lStatus.AutoSize = true;
+            this.lStatus.Location = new System.Drawing.Point(12, 528);
+            this.lStatus.Name = "lStatus";
+            this.lStatus.Size = new System.Drawing.Size(57, 13);
+            this.lStatus.TabIndex = 21;
+            this.lStatus.Text = "Status: 0%";
+            // 
+            // tStep
+            // 
+            this.tStep.Interval = 5000;
+            this.tStep.Tick += new System.EventHandler(this.tStep_Tick);
+            // 
+            // bStart
+            // 
+            this.bStart.Location = new System.Drawing.Point(103, 484);
+            this.bStart.Name = "bStart";
+            this.bStart.Size = new System.Drawing.Size(85, 41);
+            this.bStart.TabIndex = 22;
+            this.bStart.Text = "Start Bot";
+            this.bStart.UseVisualStyleBackColor = true;
+            this.bStart.Click += new System.EventHandler(this.bStart_Click);
+            // 
+            // nudStepTime
+            // 
+            this.nudStepTime.Location = new System.Drawing.Point(15, 565);
+            this.nudStepTime.Maximum = new decimal(new int[] {
+            60000,
+            0,
+            0,
+            0});
+            this.nudStepTime.Minimum = new decimal(new int[] {
+            300,
+            0,
+            0,
+            0});
+            this.nudStepTime.Name = "nudStepTime";
+            this.nudStepTime.Size = new System.Drawing.Size(125, 20);
+            this.nudStepTime.TabIndex = 23;
+            this.nudStepTime.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.nudStepTime.Value = new decimal(new int[] {
+            5000,
+            0,
+            0,
+            0});
+            // 
+            // lMoveSpeed
+            // 
+            this.lMoveSpeed.AutoSize = true;
+            this.lMoveSpeed.Location = new System.Drawing.Point(12, 549);
+            this.lMoveSpeed.Name = "lMoveSpeed";
+            this.lMoveSpeed.Size = new System.Drawing.Size(127, 13);
+            this.lMoveSpeed.TabIndex = 24;
+            this.lMoveSpeed.Text = "Ходить раз в %s секунд";
+            // 
+            // bSetSpeed
+            // 
+            this.bSetSpeed.Location = new System.Drawing.Point(145, 562);
+            this.bSetSpeed.Name = "bSetSpeed";
+            this.bSetSpeed.Size = new System.Drawing.Size(75, 23);
+            this.bSetSpeed.TabIndex = 25;
+            this.bSetSpeed.Text = "Применить";
+            this.bSetSpeed.UseVisualStyleBackColor = true;
+            this.bSetSpeed.Click += new System.EventHandler(this.bSetSpeed_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(740, 708);
+            this.ClientSize = new System.Drawing.Size(740, 722);
+            this.Controls.Add(this.bSetSpeed);
+            this.Controls.Add(this.lMoveSpeed);
+            this.Controls.Add(this.nudStepTime);
+            this.Controls.Add(this.bStart);
+            this.Controls.Add(this.lStatus);
             this.Controls.Add(this.tbLog);
             this.Controls.Add(this.abUrl);
             this.Controls.Add(this.wcMain);
             this.Controls.Add(this.bRunJS);
             this.Controls.Add(this.tbJS);
-            this.Controls.Add(this.button9);
-            this.Controls.Add(this.button8);
-            this.Controls.Add(this.button7);
-            this.Controls.Add(this.button6);
-            this.Controls.Add(this.button5);
-            this.Controls.Add(this.button4);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
             this.Controls.Add(this.bLogin);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
-            this.Text = "Form1";
+            this.Text = "FantasyBot";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             this.Load += new System.EventHandler(this.MainForm_Load);
+            ((System.ComponentModel.ISupportInitialize)(this.nudStepTime)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -232,21 +209,18 @@
 
         #endregion
         private System.Windows.Forms.Button bLogin;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button3;
-        private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.Button button5;
-        private System.Windows.Forms.Button button6;
-        private System.Windows.Forms.Button button9;
-        private System.Windows.Forms.Button button8;
-        private System.Windows.Forms.Button button7;
         private System.Windows.Forms.TextBox tbJS;
         private System.Windows.Forms.Button bRunJS;
         private Awesomium.Windows.Forms.WebControl wcMain;
         private Awesomium.Windows.Forms.WebSessionProvider webSessionProvider1;
         private Awesomium.Windows.Forms.AddressBox abUrl;
         private System.Windows.Forms.TextBox tbLog;
+        private System.Windows.Forms.Label lStatus;
+        private System.Windows.Forms.Timer tStep;
+        private System.Windows.Forms.Button bStart;
+        private System.Windows.Forms.NumericUpDown nudStepTime;
+        private System.Windows.Forms.Label lMoveSpeed;
+        private System.Windows.Forms.Button bSetSpeed;
     }
 }
 
