@@ -14,7 +14,8 @@ function InjectJquery(urlJQuery) {
 function GetDirections() {
     var frameDocument = $("frame[name='loc']", top.document)[0].contentDocument;
     var frame = $(frameDocument).find("frame[name='no_combat']")[0].contentDocument;
-    console.log("Frame: " + $(frame).contents().html());
+    /*console.log("Frame: " + $(frame).contents().html());*/
+    return $(frame).contents().html();
 }
 
 function MoveTo(direction) {
@@ -35,7 +36,8 @@ function GetStatus() {
     var frame = $(frameDocument).find("frame[name='no_combat']")[0].contentDocument;
 
     var hru = $(frame).contents().find("#hru").html();
-    console.log("Status: " + hru);
+    /*console.log("Status: " + hru);*/
+    return hru;
 }
 
 function Logon(login, pass) {

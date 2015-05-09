@@ -6,6 +6,7 @@ using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
 using Awesomium.Core;
+using Awesomium.Windows.Forms;
 using FantasyBot.Context;
 using Newtonsoft.Json;
 
@@ -16,6 +17,8 @@ namespace FantasyBot
         public MainForm()
         {
             InitializeComponent();
+            LoadSettings();
+            nudStepTime.Value = Convert.ToDecimal(_setting.MoveSpeed);
             abUrl.WebControl = wcMain;
         }
 
@@ -31,10 +34,9 @@ namespace FantasyBot
             _map.Show();
             EventHandler();
             Text = $"FantasyBot: {Application.ProductVersion}, Context: {BaseLogic.GetAssembleVersion()}";
-
-            LoadSettings();
         }
 
+        private WebSessionProvider _wspSession;
         private void LoadSettings()
         {
             try
@@ -51,8 +53,17 @@ namespace FantasyBot
                     var content = JsonConvert.SerializeObject(_setting);
                     File.WriteAllText(fname, content);
                 }
-                nudStepTime.Value = Convert.ToDecimal(_setting.MoveSpeed);
-                /*nudStepTime_ValueChanged(this, null);*/
+                _wspSession = new WebSessionProvider();
+                if (!string.IsNullOrEmpty(_setting.Proxy))
+                {
+                    var preference = _wspSession.Preferences;
+                    preference.ProxyConfig = _setting.Proxy;
+                    _wspSession.Preferences = preference;
+                }
+                var path = Path.Combine(Application.StartupPath, "temp");
+                _wspSession.DataPath = path;
+                //wcMain.WebSession = WebCore.CreateWebSession(path, _wspSession.Preferences);
+                _wspSession.Views.Add(this.wcMain);
             }
             catch (Exception ex)
             {
@@ -71,8 +82,77 @@ namespace FantasyBot
         }
 
         private void tStep_Tick(object sender, EventArgs e)
-        {
-            BaseLogic.GetStatus(abUrl);
+        {//socks4://127.0.0.1:6080
+            var statusMsg = BaseLogic.GetStatus(wcMain);
+
+            var status = BaseLogic.GetStatus(statusMsg);
+            if (status > 5)
+            {
+                var jval = BaseLogic.Step(wcMain);
+
+                if (BaseLogic.NeedCode(jval))
+                {
+                    Debug.WriteLine("WcMainOnConsoleMessage, Найдена капча");
+                    return;
+                }
+                IsRepit = false;
+                if (_activePoint == null)
+                {
+                    Debug.WriteLine("WcMainOnConsoleMessage, Создание точки.");
+
+                    //Если точка первая, создаем ее
+                    _activePoint = BaseLogic.CreatePoint(wcMain);
+                }
+                Debug.WriteLine($"WcMainOnConsoleMessage, Обновление точки: {_activePoint?.Name}");
+
+                //обновляем точку, не обновляем Directions если он уже есть
+                _activePoint = BaseLogic.UpdatePoint(_activePoint, jval);
+                Debug.WriteLine(
+                    _activePoint?.Directions != null
+                        ? $"WcMainOnConsoleMessage, Обновление точки: {_activePoint?.Name}, {_activePoint?.Directions?.Count}: {string.Join("-", _activePoint?.Directions)}"
+                        : $"WcMainOnConsoleMessage, Обновление точки: {_activePoint?.Name}, {_activePoint?.Directions?.Count}.");
+
+                if (_activePoint == null)
+                    return;
+
+                //find items
+                var item = BaseLogic.FindItem(jval);
+                if (!string.IsNullOrEmpty(item))
+                {
+                    _activePoint.PickUp(item);
+                    return;
+                }
+
+                //find quest actions
+                var action = BaseLogic.FindQuestAction(jval);
+                if (!string.IsNullOrEmpty(action))
+                {
+                    if (BaseLogic.AllowedAction(action))
+                    {
+                        _activePoint.InvokeQuest(action);
+                        return;
+                    }
+                }
+
+                _map.WritePoint(_activePoint.Location, _activePoint.Directions);
+                //проверяем были ли мы на этой точке раньше
+                if (!CurrentPoint.Points.ContainsKey(_activePoint.Name))
+                {
+                    //eсли нет, добавляем
+                    CurrentPoint.Points.Add(_activePoint.Name, _activePoint);
+                }
+                else
+                {
+                    Debug.WriteLine(
+                        _activePoint?.Directions != null
+                            ? $"WcMainOnConsoleMessage, повторное прибывание в данной точке: {_activePoint.Name}, {_activePoint.Directions.Count}: {string.Join("-", _activePoint.Directions)}"
+                            : $"WcMainOnConsoleMessage, повторное прибывание в данной точке: {_activePoint.Name}");
+                }
+                //идем если есть куда идти, иначе возвращаемся
+                _activePoint = _activePoint.Move() ?? _activePoint.Return();
+                return;
+            }
+            return;
         }
 
         private void WcMainOnConsoleMessage(object sender, ConsoleMessageEventArgs e)
@@ -83,67 +163,6 @@ namespace FantasyBot
 
                 if (message.StartsWith("Frame: "))
                 {
-                    if (BaseLogic.NeedCode(message))
-                    {
-                        Debug.WriteLine("WcMainOnConsoleMessage, Найдена капча");
-                        return;
-                    }
-                    if (_activePoint == null)
-                    {
-                        Debug.WriteLine("WcMainOnConsoleMessage, Создание точки.");
-
-                        //Если точка первая, создаем ее
-                        _activePoint = BaseLogic.CreatePoint(abUrl);
-                    }
-                    Debug.WriteLine($"WcMainOnConsoleMessage, Обновление точки: {_activePoint?.Name}");
-
-                    //обновляем точку, не обновляем Directions если он уже есть
-                    _activePoint = BaseLogic.UpdatePoint(_activePoint, message);
-                    Debug.WriteLine(
-                        _activePoint?.Directions != null
-                            ? $"WcMainOnConsoleMessage, Обновление точки: {_activePoint?.Name}, {_activePoint?.Directions?.Count}: {string.Join("-", _activePoint?.Directions)}"
-                            : $"WcMainOnConsoleMessage, Обновление точки: {_activePoint?.Name}, {_activePoint?.Directions?.Count}.");
-
-                    if (_activePoint == null)
-                        return;
-
-                    //find items
-                    var item = BaseLogic.FindItem(message);
-                    if (!string.IsNullOrEmpty(item))
-                    {
-                        _activePoint.PickUp(item);
-                        return;
-                    }
-
-                    //find quest actions
-                    var action = BaseLogic.FindQuestAction(message);
-                    if (!string.IsNullOrEmpty(action))
-                    {
-                        if (BaseLogic.AllowedAction(action))
-                        {
-                            _activePoint.InvokeQuest(action);
-                            return;
-                        }
-                    }
-
-                    _map.WritePoint(_activePoint.Location, _activePoint.Directions);
-                    //проверяем были ли мы на этой точке раньше
-                    if (!CurrentPoint.Points.ContainsKey(_activePoint.Name))
-                    {
-                        //eсли нет, добавляем
-                        CurrentPoint.Points.Add(_activePoint.Name, _activePoint);
-                    }
-                    else
-                    {
-                        Debug.WriteLine(
-                            _activePoint?.Directions != null
-                                ? $"WcMainOnConsoleMessage, повторное прибывание в данной точке: {_activePoint.Name}, {_activePoint.Directions.Count}: {string.Join("-", _activePoint.Directions)}"
-                                : $"WcMainOnConsoleMessage, повторное прибывание в данной точке: {_activePoint.Name}");
-                    }
-                    //идем если есть куда идти, иначе возвращаемся
-                    _activePoint = _activePoint.Move() ?? _activePoint.Return();
-                    return;
-
                 }
 
                 if (message.StartsWith("PickUpItem: "))
@@ -160,18 +179,7 @@ namespace FantasyBot
 
                 if (message.StartsWith("Status: "))
                 {
-                    var status = BaseLogic.GetStatus(message);
-                    if (status > 5)
-                    {
-                        BaseLogic.Step(abUrl);
-                    }
-                    return;
-                }
-
-                if (message.StartsWith("Run: "))
-                {
-                    BaseLogic.Step(abUrl);
-                    return;
+                    
                 }
 
                 if (message.StartsWith("Injected jQuery:"))
@@ -194,9 +202,13 @@ namespace FantasyBot
         {
             lStatus.ThreadSafe(() => lStatus.Text = $"Status: {htlmContent}%");
         }
-
+        //TODO: Hot Fix
+        private static bool IsRepit = false;
         private static void BaseLogicOnOnNeedCaptcha(object sender, string htlmContent)
         {
+            if (IsRepit)
+                return;
+            IsRepit = true;
             Debug.WriteLine("BaseLogicOnOnAlarm, Найдена капча");
             MessageBox.Show("captcha found");
         }
@@ -218,7 +230,7 @@ namespace FantasyBot
             {
                 bRunJS.BackColor = Color.Red;
 
-                abUrl.RunJs($"Logon('{_setting.Login}', '{_setting.Password}');");
+                wcMain.ExecuteJavascript($"Logon('{_setting.Login}', '{_setting.Password}');");
             }
             catch (Exception ex)
             {
@@ -234,7 +246,7 @@ namespace FantasyBot
                 var btn = sender as Button;
                 if (btn == null)
                     return;
-                abUrl.RunJs($"MoveTo({btn.Text});");
+                wcMain.ExecuteJavascript($"MoveTo({btn.Text});");
             }
             catch (Exception ex)
             {
@@ -244,9 +256,10 @@ namespace FantasyBot
 
         private void bRunJS_Click(object sender, EventArgs e)
         {
+            //socks4://127.0.0.1:6080
             try
             {
-                abUrl.RunJs(tbJS.Text);
+                wcMain.ExecuteJavascript(tbJS.Text);
             }
             catch (Exception ex)
             {
@@ -271,8 +284,8 @@ namespace FantasyBot
             if (!e.IsMainFrame && e.FrameId != 7)
                 return;
 
-            abUrl.RunJs("Main.js".GetJsCode());
-            abUrl.RunJs("InjectJquery('https://code.jquery.com/jquery-2.1.3.js');");
+            wcMain.ExecuteJavascript("Main.js".GetJsCode());
+            wcMain.ExecuteJavascript("InjectJquery('https://code.jquery.com/jquery-2.1.3.js');");
         }
 
         private void bStart_Click(object sender, EventArgs e)
@@ -328,5 +341,10 @@ namespace FantasyBot
         private CurrentPoint _activePoint;
         private MapForm _map;
         private AppSetting _setting;
+
+        private void Awesomium_Windows_Forms_WebControl_DocumentReady(object sender, DocumentReadyEventArgs e)
+        {
+           /* wcMain.ca*/
+        }
     }
 }

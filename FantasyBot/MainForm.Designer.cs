@@ -1,4 +1,7 @@
-﻿namespace FantasyBot
+﻿using System;
+using System.IO;
+
+namespace FantasyBot
 {
     partial class MainForm
     {
@@ -34,7 +37,6 @@
             this.tbJS = new System.Windows.Forms.TextBox();
             this.bRunJS = new System.Windows.Forms.Button();
             this.wcMain = new Awesomium.Windows.Forms.WebControl(this.components);
-            this.webSessionProvider1 = new Awesomium.Windows.Forms.WebSessionProvider(this.components);
             this.abUrl = new Awesomium.Windows.Forms.AddressBox();
             this.tbLog = new System.Windows.Forms.TextBox();
             this.lStatus = new System.Windows.Forms.Label();
@@ -80,16 +82,13 @@
             this.wcMain.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.wcMain.Location = new System.Drawing.Point(12, 12);
-            this.wcMain.NavigationInfo = Awesomium.Core.NavigationInfo.Normal;
+            this.wcMain.NavigationInfo = Awesomium.Core.NavigationInfo.None;
             this.wcMain.Size = new System.Drawing.Size(718, 461);
-            this.wcMain.Source = new System.Uri("http://fantasyland.ru/", System.UriKind.Absolute);
+            this.wcMain.Source = new System.Uri("http://www.fantasyland.ru/main.php", System.UriKind.Absolute);
             this.wcMain.TabIndex = 16;
             this.wcMain.ConsoleMessage += new Awesomium.Core.ConsoleMessageEventHandler(this.WcMainOnConsoleMessage);
+            this.wcMain.DocumentReady += new Awesomium.Core.DocumentReadyEventHandler(this.Awesomium_Windows_Forms_WebControl_DocumentReady);
             this.wcMain.LoadingFrameComplete += new Awesomium.Core.FrameEventHandler(this.Awesomium_Windows_Forms_WebControl_LoadingFrameComplete);
-            // 
-            // webSessionProvider1
-            // 
-            this.webSessionProvider1.Views.Add(this.wcMain);
             // 
             // abUrl
             // 
@@ -212,7 +211,6 @@
         private System.Windows.Forms.TextBox tbJS;
         private System.Windows.Forms.Button bRunJS;
         private Awesomium.Windows.Forms.WebControl wcMain;
-        private Awesomium.Windows.Forms.WebSessionProvider webSessionProvider1;
         private Awesomium.Windows.Forms.AddressBox abUrl;
         private System.Windows.Forms.TextBox tbLog;
         private System.Windows.Forms.Label lStatus;

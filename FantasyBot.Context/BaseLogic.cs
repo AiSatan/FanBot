@@ -5,11 +5,8 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Runtime.ExceptionServices;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
-using System.Xml.Schema;
+using Awesomium.Core;
 using Awesomium.Windows.Forms;
 using Newtonsoft.Json;
 
@@ -66,7 +63,7 @@ namespace FantasyBot.Context
             }
         }
 
-        public static CurrentPoint CreatePoint(AddressBox control)
+        public static CurrentPoint CreatePoint(WebControl control)
         {
             var point = new CurrentPoint(null, control, Direction.Refresh);
             Debug.WriteLine($"OnCreatePoint: {point.Name},{point.ParentPath}, {point.Directions?.Count}");
@@ -85,10 +82,10 @@ namespace FantasyBot.Context
             return point;
         }
 
-        public static void GetStatus(AddressBox control)
+        public static JSValue GetStatus(WebControl control)
         {
             Debug.WriteLine($"GetStatus");
-            control.RunJs($"GetStatus();");
+            return control.ExecuteJavascriptWithResult($"GetStatus();");
         }
 
         public static int GetStatus(string message)
@@ -155,9 +152,9 @@ namespace FantasyBot.Context
             return fvi.FileVersion;
         }
 
-        public static void Step(AddressBox control)
+        public static JSValue Step(WebControl control)
         {
-            control.RunJs("GetDirections();");
+            return control.ExecuteJavascriptWithResult("GetDirections();");
         }
 
         public static bool AllowedAction(string action)

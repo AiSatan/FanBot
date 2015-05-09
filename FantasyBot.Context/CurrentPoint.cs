@@ -20,7 +20,7 @@ namespace FantasyBot.Context
         /// <param name="parentPoint">точка предок</param>
         /// <param name="control">элемент управления</param>
         /// <param name="parentPath">направление по которому пришли к этой точке</param>
-        public CurrentPoint(CurrentPoint parentPoint, AddressBox control, Direction parentPath)
+        public CurrentPoint(CurrentPoint parentPoint, WebControl control, Direction parentPath)
         {
             Debug.WriteLine($"CurrentPoint, создаем точку, parent {parentPoint?.Name}");
 
@@ -113,7 +113,7 @@ namespace FantasyBot.Context
             OnMove?.Invoke(this, direction);
             var intValue = (int)direction;
             //двигаемся
-            _control.RunJs($"MoveTo({intValue});");
+            _control.ExecuteJavascript($"MoveTo({intValue});");
         }
 
         private void RemoveDirection(Direction direction)
@@ -171,18 +171,18 @@ namespace FantasyBot.Context
         public void PickUp(string value)
         {
             Debug.WriteLine($"PickUp: поднимаем item: {value}, в точке: {this?.Name}");
-            _control.RunJs($"PickUpItem({value});");
+            _control.ExecuteJavascript($"PickUpItem({value});");
         }
 
         public void InvokeQuest(string action)
         {
             Debug.WriteLine($"InvokeQuest: выполняем action: {action}, в точке: {this?.Name}");
-            _control.RunJs($"InvokeAction({action});");
+            _control.ExecuteJavascript($"InvokeAction({action});");
         }
 
         private Direction _path;
         private readonly CurrentPoint _parentPoint;
-        private readonly AddressBox _control;
+        private readonly WebControl _control;
         public static event MoveEventHandler OnMove = delegate { };
     }
 
